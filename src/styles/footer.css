@@ -1,0 +1,35 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  margin: 16px auto;
+  gap: 30px;
+  span {
+    padding: 6px;
+    font-size: 15px;
+  }
+  .filter {
+    display: flex;
+    gap: 10px;
+    li {
+      padding: 6px;
+      border: 1px solid transparent;
+      font-size: 15px;
+    }
+    li:hover {
+      cursor: pointer;
+      border: 1px solid #cf7d7d;
+      border-radius: 5px;
+    }
+    li.selected {
+      border: 1px solid #cf7d7d;
+      border-radius: 5px;
+    }
+  }
+  .clear {
+    padding: 6px;
+    font-size: 15px;
+  }
+  .clear:hover {
+    text-decoration: underline;
+  }
+}
