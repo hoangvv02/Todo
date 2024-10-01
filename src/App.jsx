@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import "./App.css";
-import Logo from "./components/Logo";
 import Header from "./components/Header";
 import ListTodo from "./components/ListTodo";
 import Footer from "./components/Footer";
+import ChangeMode from "./components/ChangeMode";
+import { ThemeProvider, ThemeContext } from "./ThemeContext";
+import "./App.css";
+import Logo from "./components/Logo";
+import { FILTER } from "./constant/constant";
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +14,7 @@ class App extends Component {
     this.state = {
       todos: [],
       newTodo: "",
+      selectedFilter: FILTER.ALL,
     };
   }
   handleInputChange = (event) => {
@@ -79,27 +83,76 @@ class App extends Component {
 
   render() {
     return (
+      <ThemeProvider>
+        <ThemedApp
+          todos={this.state.todos}
+          newTodo={this.state.newTodo}
+          handleInputChange={this.handleInputChange}
+          addTodo={this.addTodo}
+          toggleTodo={this.toggleTodo}
+          toggleAllTodo={this.toggleAllTodo}
+          removeTodo={this.removeTodo}
+          removeCompletedTodos={this.removeCompletedTodos}
+          updateTodo={this.updateTodo}
+          selectedFilter={this.state.selectedFilter}
+          handleFilterChange={this.handleFilterChange}
+          countIncompleteTodos={this.countIncompleteTodos()}
+        />
+      </ThemeProvider>
+    );
+  }
+}
+
+class ThemedApp extends Component {
+  static contextType = ThemeContext;
+
+  componentDidMount() {
+    document.body.className = this.context.theme;
+  }
+
+  componentDidUpdate() {
+    document.body.className = this.context.theme;
+  }
+
+  render() {
+    const {
+      todos,
+      newTodo,
+      handleInputChange,
+      addTodo,
+      toggleTodo,
+      toggleAllTodo,
+      selectedFilter,
+      handleFilterChange,
+      removeCompletedTodos,
+      countIncompleteTodos,
+      removeTodo,
+      updateTodo,
+    } = this.props;
+
+    return (
       <div className="app-content">
+        <ChangeMode />
         <Logo />
         <section className="section-container">
           <Header
-            newTodo={this.state.newTodo}
-            handleInputChange={this.handleInputChange}
-            addTodo={this.addTodo}
-            toggleAllTodo={this.toggleAllTodo}
+            newTodo={newTodo}
+            handleInputChange={handleInputChange}
+            addTodo={addTodo}
+            toggleAllTodo={toggleAllTodo}
           />
           <ListTodo
-            todos={this.state.todos}
-            toggleTodo={this.toggleTodo}
-            removeTodo={this.removeTodo}
-            updateTodo={this.updateTodo}
-            selectedFilter={this.state.selectedFilter}
+            todos={todos}
+            toggleTodo={toggleTodo}
+            removeTodo={removeTodo}
+            updateTodo={updateTodo}
+            selectedFilter={selectedFilter}
           />
           <Footer
-            count={this.countIncompleteTodos()}
-            removeCompletedTodos={this.removeCompletedTodos}
-            selectedFilter={this.state.selectedFilter}
-            handleFilterChange={this.handleFilterChange}
+            count={countIncompleteTodos}
+            removeCompletedTodos={removeCompletedTodos}
+            selectedFilter={selectedFilter}
+            handleFilterChange={handleFilterChange}
           />
         </section>
       </div>

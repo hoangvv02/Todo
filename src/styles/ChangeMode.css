@@ -1,0 +1,10 @@
+.change-mode {
+  padding: 10px 20px;
+  margin: 30px;
+  border: 1px solid #cf7d7d;
+  box-shadow: var(--box-shadow);
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--section-content-bg);
+  color: var(--text-color);
+}
