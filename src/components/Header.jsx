@@ -4,17 +4,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 class Header extends Component {
+  addTodo = (event) => {
+    event.preventDefault();
+    const { isEditInput, addTodo, updateTodo, idEdit, inputRef } = this.props;
+    const newTodo = inputRef.current.value.trim();
+
+    if (newTodo && !isEditInput) {
+      addTodo({
+        id: Date.now(),
+        text: newTodo,
+        done: false,
+      });
+    } else if (newTodo && isEditInput) {
+      updateTodo(idEdit, newTodo);
+    }
+    inputRef.current.value = "";
+  };
+
   render() {
-    const { newTodo, handleInputChange, addTodo, toggleAllTodo } = this.props;
+    const { toggleAllTodo, inputRef } = this.props;
     return (
-      <form className="header" onSubmit={addTodo}>
+      <form className="header" onSubmit={this.addTodo}>
         <span>
           <FontAwesomeIcon icon={faChevronDown} onClick={toggleAllTodo} />
         </span>
         <input
           type="text"
-          value={newTodo}
-          onChange={handleInputChange}
+          ref={inputRef}
           placeholder="What needs to be done?"
         />
       </form>

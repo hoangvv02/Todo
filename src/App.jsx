@@ -1,35 +1,37 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import Header from "./components/Header";
 import ListTodo from "./components/ListTodo";
 import Footer from "./components/Footer";
 import ChangeMode from "./components/ChangeMode";
-import { ThemeProvider, ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "./ThemeContext";
 import "./App.css";
 import Logo from "./components/Logo";
 import { FILTER } from "./constant/constant";
+import Pagination from "./components/Pagination";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      newTodo: "",
       selectedFilter: FILTER.ALL,
+      isEditInput: false,
+      idEdit: null,
+      currentPage: 1,
+      todosPerPage: 5,
     };
+    this.inputRef = createRef();
   }
-  handleInputChange = (event) => {
-    this.setState({ newTodo: event.target.value });
+
+  addTodo = (todo) => {
+    this.setState({
+      todos: [...this.state.todos, todo],
+      newTodo: "",
+    });
   };
 
-  addTodo = (event) => {
-    event.preventDefault();
-    const { newTodo, todos } = this.state;
-    if (newTodo.trim()) {
-      this.setState({
-        todos: [...todos, { id: Date.now(), text: newTodo, done: false }],
-        newTodo: "",
-      });
-    }
+  handleInputChange = (event) => {
+    this.setState({ newTodo: event.target.value });
   };
 
   toggleTodo = (id) => {
@@ -81,83 +83,72 @@ class App extends Component {
     this.setState({ selectedFilter: filter });
   };
 
-  render() {
-    return (
-      <ThemeProvider>
-        <ThemedApp
-          todos={this.state.todos}
-          newTodo={this.state.newTodo}
-          handleInputChange={this.handleInputChange}
-          addTodo={this.addTodo}
-          toggleTodo={this.toggleTodo}
-          toggleAllTodo={this.toggleAllTodo}
-          removeTodo={this.removeTodo}
-          removeCompletedTodos={this.removeCompletedTodos}
-          updateTodo={this.updateTodo}
-          selectedFilter={this.state.selectedFilter}
-          handleFilterChange={this.handleFilterChange}
-          countIncompleteTodos={this.countIncompleteTodos()}
-        />
-      </ThemeProvider>
-    );
-  }
-}
+  updateInput = (todo) => {
+    this.setState({ isEditInput: true, idEdit: todo.id });
+    this.inputRef.current.value = todo.text;
+  };
 
-class ThemedApp extends Component {
-  static contextType = ThemeContext;
-
-  componentDidMount() {
-    document.body.className = this.context.theme;
-  }
-
-  componentDidUpdate() {
-    document.body.className = this.context.theme;
-  }
+  handlePageChange = (pageNumber) => {
+    this.setState({ currentPage: pageNumber });
+  };
 
   render() {
     const {
       todos,
-      newTodo,
-      handleInputChange,
-      addTodo,
-      toggleTodo,
-      toggleAllTodo,
       selectedFilter,
-      handleFilterChange,
-      removeCompletedTodos,
-      countIncompleteTodos,
-      removeTodo,
-      updateTodo,
-    } = this.props;
+      isEditInput,
+      idEdit,
+      todosPerPage,
+      currentPage,
+    } = this.state;
+
+    const { theme } = this.context;
+
+    const lastTodoIndex = currentPage * todosPerPage;
+    const firstTodoIndex = lastTodoIndex - todosPerPage;
+    const currentTodos = todos.slice(firstTodoIndex, lastTodoIndex);
 
     return (
-      <div className="app-content">
+      <div className={`app-content ${theme}`}>
         <ChangeMode />
         <Logo />
         <section className="section-container">
           <Header
-            newTodo={newTodo}
-            handleInputChange={handleInputChange}
-            addTodo={addTodo}
-            toggleAllTodo={toggleAllTodo}
+            todos={todos}
+            inputRef={this.inputRef}
+            handleInputChange={this.handleInputChange}
+            addTodo={this.addTodo}
+            toggleAllTodo={this.toggleAllTodo}
+            isEditInput={isEditInput}
+            idEdit={idEdit}
+            updateTodo={this.updateTodo}
           />
           <ListTodo
-            todos={todos}
-            toggleTodo={toggleTodo}
-            removeTodo={removeTodo}
-            updateTodo={updateTodo}
+            todos={currentTodos}
+            toggleTodo={this.toggleTodo}
+            removeTodo={this.removeTodo}
+            updateTodo={this.updateTodo}
             selectedFilter={selectedFilter}
+            updateInput={this.updateInput}
+          />
+          <Pagination
+            todos={todos}
+            todosPerPage={todosPerPage}
+            currentPage={currentPage}
+            handlePageChange={this.handlePageChange}
           />
           <Footer
-            count={countIncompleteTodos}
-            removeCompletedTodos={removeCompletedTodos}
+            count={this.countIncompleteTodos}
+            removeCompletedTodos={this.removeCompletedTodos}
             selectedFilter={selectedFilter}
-            handleFilterChange={handleFilterChange}
+            handleFilterChange={this.handleFilterChange}
           />
         </section>
       </div>
     );
   }
 }
+
+App.contextType = ThemeContext;
 
 export default App;

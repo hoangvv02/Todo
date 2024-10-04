@@ -1,0 +1,20 @@
+.pagination {
+  display: block;
+  button {
+    padding: 6px;
+    border: 1px solid transparent;
+    background-color: var(--section-content-bg);
+    font-size: 15px;
+    margin: 10px 5px;
+    color: var(--text-color);
+  }
+  button:hover {
+    cursor: pointer;
+    border: 1px solid #cf7d7d;
+    border-radius: 5px;
+  }
+  button.active {
+    border: 1px solid #cf7d7d;
+    border-radius: 5px;
+  }
+}
