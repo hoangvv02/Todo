@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../styles/list.css";
 import { FILTER } from "../constant/constant";
 import TodoItem from "./TodoItem";
+import StyleScroll from "../HOC/StyleScroll";
 
 class ListTodo extends Component {
   render() {
@@ -33,4 +34,4 @@ class ListTodo extends Component {
   }
 }
 
-export default ListTodo;
+export default StyleScroll(ListTodo);

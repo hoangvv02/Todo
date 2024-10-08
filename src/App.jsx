@@ -7,7 +7,7 @@ import { ThemeContext } from "./ThemeContext";
 import "./App.css";
 import Logo from "./components/Logo";
 import { FILTER } from "./constant/constant";
-import Pagination from "./components/Pagination";
+// import Pagination from "./components/Pagination";
 
 class App extends Component {
   constructor(props) {
@@ -15,8 +15,6 @@ class App extends Component {
     this.state = {
       todos: [],
       selectedFilter: FILTER.ALL,
-      isEditInput: false,
-      idEdit: null,
       currentPage: 1,
       todosPerPage: 5,
     };
@@ -84,8 +82,9 @@ class App extends Component {
   };
 
   updateInput = (todo) => {
-    this.setState({ isEditInput: true, idEdit: todo.id });
     this.inputRef.current.value = todo.text;
+    this.inputRef.current.focus();
+    this.inputRef.current.idEdit = todo.id;
   };
 
   handlePageChange = (pageNumber) => {
@@ -93,20 +92,13 @@ class App extends Component {
   };
 
   render() {
-    const {
-      todos,
-      selectedFilter,
-      isEditInput,
-      idEdit,
-      todosPerPage,
-      currentPage,
-    } = this.state;
+    const { todos, selectedFilter, todosPerPage, currentPage } = this.state;
 
     const { theme } = this.context;
 
-    const lastTodoIndex = currentPage * todosPerPage;
-    const firstTodoIndex = lastTodoIndex - todosPerPage;
-    const currentTodos = todos.slice(firstTodoIndex, lastTodoIndex);
+    // const lastTodoIndex = currentPage * todosPerPage;
+    // const firstTodoIndex = lastTodoIndex - todosPerPage;
+    // const currentTodos = todos.slice(firstTodoIndex, lastTodoIndex);
 
     return (
       <div className={`app-content ${theme}`}>
@@ -119,24 +111,23 @@ class App extends Component {
             handleInputChange={this.handleInputChange}
             addTodo={this.addTodo}
             toggleAllTodo={this.toggleAllTodo}
-            isEditInput={isEditInput}
-            idEdit={idEdit}
             updateTodo={this.updateTodo}
           />
           <ListTodo
-            todos={currentTodos}
+            // todos={currentTodos}
+            todos={todos}
             toggleTodo={this.toggleTodo}
             removeTodo={this.removeTodo}
             updateTodo={this.updateTodo}
             selectedFilter={selectedFilter}
             updateInput={this.updateInput}
           />
-          <Pagination
+          {/* <Pagination
             todos={todos}
             todosPerPage={todosPerPage}
             currentPage={currentPage}
             handlePageChange={this.handlePageChange}
-          />
+          /> */}
           <Footer
             count={this.countIncompleteTodos}
             removeCompletedTodos={this.removeCompletedTodos}

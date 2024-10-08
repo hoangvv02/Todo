@@ -6,19 +6,20 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 class Header extends Component {
   addTodo = (event) => {
     event.preventDefault();
-    const { isEditInput, addTodo, updateTodo, idEdit, inputRef } = this.props;
+    const { addTodo, updateTodo, inputRef } = this.props;
     const newTodo = inputRef.current.value.trim();
 
-    if (newTodo && !isEditInput) {
+    if (newTodo && !inputRef.current.idEdit) {
       addTodo({
         id: Date.now(),
         text: newTodo,
         done: false,
       });
-    } else if (newTodo && isEditInput) {
-      updateTodo(idEdit, newTodo);
+    } else if (newTodo && inputRef.current.idEdit) {
+      updateTodo(inputRef.current.idEdit, newTodo);
     }
     inputRef.current.value = "";
+    inputRef.current.idEdit = null;
   };
 
   render() {

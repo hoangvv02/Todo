@@ -1,6 +1,26 @@
 .list-todo {
   margin-top: 20px;
   text-align: left;
+  max-height: 330px;
+  /*  overflow-y: auto;
+  .list-todo::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  .list-todo::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .list-todo::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  .list-todo::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    cursor: default;
+  }
+  */
   .item {
     padding: 15px 15px 15px 30px;
     position: relative;
