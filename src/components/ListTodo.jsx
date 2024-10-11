@@ -3,10 +3,11 @@ import "../styles/list.css";
 import { FILTER } from "../constant/constant";
 import TodoItem from "./TodoItem";
 import StyleScroll from "../HOC/StyleScroll";
+import ScrollLoadMoreData from "../HOC/ScrollLoadMoreData";
 
 class ListTodo extends Component {
   render() {
-    const { todos, selectedFilter } = this.props;
+    const { todos, selectedFilter, todosPerPage } = this.props;
     const filteredTodos = todos.filter((todo) => {
       if (selectedFilter === FILTER.ACTIVE) {
         return !todo.done;
@@ -19,7 +20,7 @@ class ListTodo extends Component {
 
     return (
       <div className="list-todo">
-        {filteredTodos.map((todo) => (
+        {filteredTodos.slice(0, todosPerPage).map((todo) => (
           <TodoItem
             key={todo.id}
             toggleTodo={this.props.toggleTodo}
@@ -34,4 +35,4 @@ class ListTodo extends Component {
   }
 }
 
-export default StyleScroll(ListTodo);
+export default ScrollLoadMoreData(ListTodo);
