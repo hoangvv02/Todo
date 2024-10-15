@@ -1,22 +1,19 @@
-import React, { Component } from "react";
+import React, { useContext } from "react";
 import { ThemeContext } from "../ThemeContext";
 import "../styles/ChangeMode.css";
 
-class ChangeMode extends Component {
-  static contextType = ThemeContext;
+const ChangeMode = () => {
+  const { toggleTheme } = useContext(ThemeContext);
 
-  handleChangeMode = () => {
-    const { toggleTheme } = this.context;
+  const handleChangeMode = () => {
     toggleTheme();
   };
 
-  render() {
-    return (
-      <button className="change-mode" onClick={this.handleChangeMode}>
-        Change mode
-      </button>
-    );
-  }
-}
+  return (
+    <button className="change-mode" onClick={handleChangeMode}>
+      Change mode
+    </button>
+  );
+};
 
 export default ChangeMode;

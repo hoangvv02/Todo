@@ -1,79 +1,68 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "../styles/list.css";
 
-class TodoItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editingId: null,
-      editingText: "",
-    };
-  }
+const TodoItem = ({
+  todo,
+  toggleTodo,
+  removeTodo,
+  updateInput,
+  updateTodo,
+}) => {
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
-  changeTodo = (todo) => {
-    this.setState({
-      editingId: todo.id,
-      editingText: todo.text,
-    });
+  const changeTodo = (todo) => {
+    setEditingId(todo.id);
+    setEditingText(todo.text);
   };
-  handleKeyDown = (event, id) => {
-    if (event.key === "Enter" && this.state.editingText.trim()) {
-      this.props.updateTodo(id, this.state.editingText);
-      this.setState({
-        editingId: null,
-        editingText: "",
-      });
+
+  const handleKeyDown = (event, id) => {
+    if (event.key === "Enter" && editingText.trim()) {
+      updateTodo(id, editingText);
+      setEditingId(null);
+      setEditingText("");
     }
   };
 
-  handleChange = (event) => {
-    this.setState({ editingText: event.target.value });
+  const handleChange = (event) => {
+    setEditingText(event.target.value);
   };
 
-  handleBlur = () => {
-    this.setState({
-      editingId: null,
-      editingText: "",
-    });
+  const handleBlur = () => {
+    setEditingId(null);
+    setEditingText("");
   };
 
-  render() {
-    const { todo, toggleTodo, removeTodo, updateInput } = this.props;
-
-    return (
-      <>
-        {this.state.editingId === todo.id ? (
+  return (
+    <>
+      {editingId === todo.id ? (
+        <input
+          className="input-change-todo"
+          value={editingText}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          onKeyDown={(event) => handleKeyDown(event, todo.id)}
+        />
+      ) : (
+        <div className={`item ${todo.done ? "done" : "active"}`}>
           <input
-            className="input-change-todo"
-            value={this.state.editingText}
-            onBlur={this.handleBlur}
-            onChange={this.handleChange}
-            onKeyDown={(event) => this.handleKeyDown(event, todo.id)}
+            type="checkbox"
+            checked={todo.done}
+            onChange={() => toggleTodo(todo.id)}
           />
-        ) : (
-          <div className={`item ${todo.done ? "done" : "active"}`}>
-            <input
-              type="checkbox"
-              checked={todo.done}
-              onChange={() => toggleTodo(todo.id)}
-            />
-            <label
-              className="item-name"
-              onDoubleClick={() => this.changeTodo(todo)}
-            >
-              {todo.text}
-            </label>
-            <button className="button-edit" onClick={() => updateInput(todo)}>
-              Sửa
-            </button>
-            <div className="icon-close" onClick={() => removeTodo(todo.id)}>
-              x
-            </div>
+          <label className="item-name" onDoubleClick={() => changeTodo(todo)}>
+            {todo.text}
+          </label>
+          <button className="button-edit" onClick={() => updateInput(todo)}>
+            Sửa
+          </button>
+          <div className="icon-close" onClick={() => removeTodo(todo.id)}>
+            x
           </div>
-        )}
-      </>
-    );
-  }
-}
+        </div>
+      )}
+    </>
+  );
+};
 
 export default TodoItem;
