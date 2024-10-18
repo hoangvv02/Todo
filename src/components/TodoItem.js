@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/list.css";
+import "../css/list.css";
 
 const TodoItem = ({
   todo,

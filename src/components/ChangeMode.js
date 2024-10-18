@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../ThemeContext";
-import "../styles/ChangeMode.css";
+import "../css/ChangeMode.css";
 
 const ChangeMode = () => {
   const { toggleTheme } = useContext(ThemeContext);

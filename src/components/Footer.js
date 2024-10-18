@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/footer.css";
+import "../css/footer.css";
 import { FILTER } from "../constant/constant";
 
 const Footer = ({

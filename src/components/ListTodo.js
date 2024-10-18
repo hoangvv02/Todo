@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/list.css";
+import "../css/list.css";
 import { FILTER } from "../constant/constant";
 import TodoItem from "./TodoItem";
 import useScrollLoadMore from "../custom hook/useScroll";

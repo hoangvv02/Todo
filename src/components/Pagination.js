@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/pagination.css";
+import "../css/pagination.css";
 
 const Pagination = ({ todos, todosPerPage, currentPage, handlePageChange }) => {
   const [pageNumbers, setPageNumbers] = useState([]);
