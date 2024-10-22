@@ -1,4 +1,5 @@
 import React, { useState, useRef, useContext } from "react";
+import axios from "axios";
 import Header from "./components/Header";
 import ListTodo from "./components/ListTodo";
 import Footer from "./components/Footer";
@@ -15,8 +16,13 @@ const App = () => {
   const inputRef = useRef(null);
   const { theme } = useContext(ThemeContext);
 
-  const addTodo = (todo) => {
-    setTodos([...todos, todo]);
+  const addTodo = async (todo) => {
+    try {
+      const response = await axios.post('http://localhost:5000/todos', todo); // URL của API
+      setTodos([...todos, response.data]); // Thêm todo mới nhận từ server
+    } catch (error) {
+      console.error('Error adding todo:', error);
+    }
   };
 
   const handleInputChange = (event) => {
@@ -40,8 +46,13 @@ const App = () => {
     }
   };
 
-  const removeTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const removeTodo = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/todos/${id}`); // Xóa todo trên server
+      setTodos(todos.filter((todo) => todo.id !== id)); // Xóa todo khỏi state
+    } catch (error) {
+      console.error('Error deleting todo:', error);
+    }
   };
 
   const removeCompletedTodos = () => {
